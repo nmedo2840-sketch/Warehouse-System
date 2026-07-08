@@ -1528,5 +1528,109 @@ location.reload();
 
 
 }
+// ============================
+// REQUESTS LIST
+// ============================
+
+
+function showRequests(){
+
+
+let html="";
+
+
+for(let i=1;i<requests.length;i++){
+
+
+html += `
+
+<tr>
+
+<td>${requests[i][0]}</td>
+
+<td>${requests[i][1]}</td>
+
+<td>${requests[i][3]}</td>
+
+<td>${requests[i][4]}</td>
+
+<td>
+
+
+<button onclick="viewRequest('${requests[i][0]}')">
+
+👁 عرض
+
+</button>
+
+
+
+<button onclick="issueRequest('${requests[i][0]}')">
+
+✅ صرف
+
+</button>
+
+
+</td>
+
+
+</tr>
+
+`;
+
+}
+
+
+document.getElementById("requestsTable")
+.innerHTML=html;
+
+
+}
+
+
+
+
+
+
+function viewRequest(no){
+
+
+let html="<h3>تفاصيل الطلب "+no+"</h3>";
+
+
+
+for(let i=1;i<requestsItems.length;i++){
+
+
+if(requestsItems[i][0]==no){
+
+
+html+=`
+
+<p>
+${requestsItems[i][1]}
+-
+${requestsItems[i][2]}
+-
+${requestsItems[i][3]}
+${requestsItems[i][4]}
+</p>
+
+`;
+
+}
+
+
+}
+
+
+
+document.getElementById("requestDetails")
+.innerHTML=html;
+
+
+}
+
 
 
