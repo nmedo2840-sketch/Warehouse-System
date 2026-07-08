@@ -1521,6 +1521,10 @@ location.reload();
 // ============================
 
 
+// ============================
+// REQUESTS LIST
+// ============================
+
 function showRequests(){
 
 
@@ -1534,13 +1538,13 @@ html += `
 
 <tr>
 
-<td>${requests[i][0]}</td>
+<td>${requests[i][0] || ""}</td>
 
-<td>${requests[i][1]}</td>
+<td>${requests[i][1] || ""}</td>
 
-<td>${requests[i][3]}</td>
+<td>${requests[i][3] || ""}</td>
 
-<td>${requests[i][4]}</td>
+<td>${requests[i][4] || ""}</td>
 
 <td>
 
@@ -1570,8 +1574,7 @@ html += `
 }
 
 
-let table =
-document.getElementById("requestsTable");
+let table = document.getElementById("requestsTable");
 
 
 if(table){
@@ -1581,14 +1584,20 @@ if(table){
 }
 
 
-} // <-- قفل دالة showRequests هنا
+}
 
 
+
+
+// ============================
+// VIEW REQUEST
+// ============================
 
 function viewRequest(no){
 
 
-let html="<h3>تفاصيل الطلب "+no+"</h3>";
+let html =
+"<h3>تفاصيل الطلب "+no+"</h3>";
 
 
 
@@ -1598,7 +1607,7 @@ for(let i=1;i<requestsItems.length;i++){
 if(requestsItems[i][0]==no){
 
 
-html+=`
+html += `
 
 <p>
 ${requestsItems[i][1]}
@@ -1630,5 +1639,3 @@ details.innerHTML = html;
 
 
 }
-
-
