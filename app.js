@@ -485,13 +485,13 @@ function showContainers(){
 function showInventory(){
 
 
-let html=`
+let html = `
 
 <table>
 
 <tr>
 
-<th>الكود</th>
+<th>كود الصنف</th>
 <th>الصنف</th>
 <th>الوحدة</th>
 <th>التصنيف</th>
@@ -508,24 +508,23 @@ let html=`
 for(let i=1;i<inventory.length;i++){
 
 
-
-html +=`
+html += `
 
 <tr>
 
-<td>${inventory[i][0]||""}</td>
+<td>${inventory[i][0] || ""}</td>
 
-<td>${inventory[i][1]||""}</td>
+<td>${inventory[i][1] || ""}</td>
 
-<td>${inventory[i][2]||""}</td>
+<td>${inventory[i][2] || ""}</td>
 
-<td>${inventory[i][3]||""}</td>
+<td>${inventory[i][3] || ""}</td>
 
-<td>${inventory[i][4]||""}</td>
+<td>${inventory[i][4] || ""}</td>
 
-<td>${inventory[i][5]||0}</td>
+<td>${inventory[i][5] || 0}</td>
 
-<td>${inventory[i][6]||""}</td>
+<td>${inventory[i][6] || ""}</td>
 
 
 </tr>
@@ -533,21 +532,18 @@ html +=`
 `;
 
 
-
 }
 
 
 
-html+="</table>";
+html += "</table>";
 
 
 
-document.getElementById("inventoryData")
-.innerHTML=html;
+document.getElementById("inventoryData").innerHTML = html;
 
 
 }
-
 
 
 
