@@ -4,6 +4,7 @@
 <head>
 
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Warehouse ERP</title>
@@ -16,21 +17,31 @@
 <body>
 
 
+
 <!-- LOGIN -->
 
 <div id="loginPage" class="login-box">
 
+
 <h1>🏭 Warehouse ERP</h1>
+
 
 <input id="username" placeholder="اسم المستخدم">
 
+
 <input id="password" type="password" placeholder="كلمة المرور">
 
-<button onclick="login()">دخول</button>
+
+<button onclick="login()">
+دخول
+</button>
+
 
 <p id="loginMsg"></p>
 
+
 </div>
+
 
 
 
@@ -42,12 +53,11 @@
 
 
 
-<!-- SIDEBAR -->
-
 <div class="sidebar">
 
 
 <h2>🏭 المخازن</h2>
+
 
 
 <button onclick="showPage('dashboard')">
@@ -55,9 +65,11 @@
 </button>
 
 
+
 <button onclick="showPage('items')">
 📦 الأصناف
 </button>
+
 
 
 <button onclick="showPage('containers')">
@@ -65,9 +77,11 @@
 </button>
 
 
+
 <button onclick="showPage('inventory')">
 📊 المخزون
 </button>
+
 
 
 <button onclick="showPage('requests')">
@@ -75,9 +89,11 @@
 </button>
 
 
+
 <button onclick="logout()">
 🚪 خروج
 </button>
+
 
 
 </div>
@@ -86,10 +102,10 @@
 
 
 
-<!-- CONTENT -->
 
 
 <div class="content">
+
 
 
 <header>
@@ -98,7 +114,9 @@
 Dashboard
 </h2>
 
+
 <span id="currentUser"></span>
+
 
 </header>
 
@@ -106,78 +124,125 @@ Dashboard
 
 
 
+
+
+
 <!-- DASHBOARD -->
 
-
 <section id="dashboard">
+
 
 
 <div class="cards">
 
 
 <div class="card">
+
 <h3>📦 الأصناف</h3>
+
 <strong id="itemsCount">0</strong>
+
 </div>
 
 
+
 <div class="card">
+
 <h3>🚢 الكونتينرات</h3>
+
 <strong id="containersCount">0</strong>
+
 </div>
 
 
+
+
 <div class="card">
+
 <h3>📋 الطلبات</h3>
+
 <strong id="requestsCount">0</strong>
+
 </div>
 
 
+
+
+
 <div class="card">
+
 <h3>🔄 الحركات</h3>
+
 <strong id="transactionsCount">0</strong>
+
 </div>
+
+
+
 
 
 <div class="card">
+
 <h3>📊 إجمالي الرصيد</h3>
+
 <strong id="totalStock">0</strong>
+
 </div>
+
+
+
 
 
 <div class="card warning">
+
 <h3>⚠ تحت الحد الأدنى</h3>
+
 <strong id="lowStock">0</strong>
-</div>
-
 
 </div>
 
 
 
+</div>
 
 
-<h2>🔄 آخر الحركات</h2>
+
+
+
+
+<h2>
+🔄 آخر الحركات
+</h2>
+
 
 
 <table>
+
 
 <thead>
 
 <tr>
 
 <th>رقم الحركة</th>
+
 <th>النوع</th>
+
 <th>الصنف</th>
+
 <th>الكمية</th>
+
 <th>إلى</th>
 
+
 </tr>
+
 
 </thead>
 
 
+
 <tbody id="lastTransactions">
+
 
 </tbody>
 
@@ -185,60 +250,68 @@ Dashboard
 </table>
 
 
+
+
 </section>
 
-
-
-
-
-
-<!-- ITEMS -->
-
+  <!-- ITEMS -->
 
 <section id="items" class="hidden">
 
 
-<label>📦 الصنف</label>
+<h2>📦 الأصناف</h2>
+
+
 
 <input 
-id="itemSearch"
-placeholder="اكتب كود الصنف أو الباركود أو الاسم"
-onkeyup="searchRequestItem()">
+id="search"
+placeholder="بحث بالكود أو الاسم"
+onkeyup="searchItems()">
 
 
-<div id="itemResult"></div>
-
-
-<div id="selectedItem"></div>
 
 
 
 <table>
 
+
 <thead>
+
 
 <tr>
 
 <th>الكود</th>
+
 <th>الصنف</th>
+
 <th>الوحدة</th>
+
 <th>الموقع</th>
+
 <th>Barcode</th>
 
+
 </tr>
+
 
 </thead>
 
 
+
 <tbody id="itemsTable">
 
+
 </tbody>
+
 
 
 </table>
 
 
+
 </section>
+
+
 
 
 
@@ -253,35 +326,58 @@ onkeyup="searchRequestItem()">
 <section id="containers" class="hidden">
 
 
-<h2>🚢 الكونتينرات</h2>
+
+<h2>
+🚢 الكونتينرات
+</h2>
+
+
+
 
 
 <table>
 
+
 <thead>
+
 
 <tr>
 
 <th>الكود</th>
+
 <th>الاسم</th>
+
 <th>المشروع</th>
+
 <th>الموقع</th>
+
 <th>المسؤول</th>
 
+
 </tr>
+
 
 </thead>
 
 
+
+
 <tbody id="containersTable">
 
+
 </tbody>
+
+
 
 
 </table>
 
 
+
 </section>
+
+
+
 
 
 
@@ -294,13 +390,25 @@ onkeyup="searchRequestItem()">
 <section id="inventory" class="hidden">
 
 
-<h2>📊 المخزون</h2>
+
+<h2>
+📊 المخزون
+</h2>
 
 
-<div id="inventoryData"></div>
+
+
+<div id="inventoryData">
+
+
+</div>
+
+
 
 
 </section>
+
+
 
 
 
@@ -314,37 +422,125 @@ onkeyup="searchRequestItem()">
 <section id="requests" class="hidden">
 
 
-<h2>📋 طلب احتياج جديد</h2>
+
+<h2>
+📋 طلب احتياج جديد
+</h2>
+
+
 
 
 
 <div class="request-box">
 
 
-<label>🚢 الكونتينر</label>
+
+
+
+
+<label>
+🚢 الكونتينر
+</label>
+
+
 
 <select id="requestContainer">
 
-</select>
-
-
-
-
-<label>📦 الصنف</label>
-
-<select id="requestItem">
 
 </select>
 
 
 
 
-<label>🔢 الكمية</label>
 
-<input 
+
+
+
+<br><br>
+
+
+
+
+
+
+
+
+<label>
+📦 الصنف
+</label>
+
+
+
+
+
+<input
+
+id="itemSearch"
+
+placeholder="اكتب كود الصنف أو الباركود أو الاسم"
+
+onkeyup="searchRequestItem()"
+
+
+
+>
+
+
+
+
+
+
+<div id="itemResult">
+
+
+</div>
+
+
+
+
+
+<div id="selectedItem">
+
+
+</div>
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+<label>
+🔢 الكمية
+</label>
+
+
+
+
+
+<input
+
 type="number"
+
 id="requestQty"
-placeholder="أدخل الكمية">
+
+placeholder="أدخل الكمية"
+
+>
+
+
+
+
+
+
 
 
 
@@ -356,63 +552,135 @@ placeholder="أدخل الكمية">
 
 
 
-<h3>📋 بنود الطلب</h3>
+
+
+
+
+
+
+<h3>
+📋 بنود الطلب
+</h3>
+
+
+
+
+
+
 
 
 <table>
 
+
+
 <thead>
+
+
 
 <tr>
 
-<th>الكود</th>
-<th>الصنف</th>
-<th>الكمية</th>
-<th>الوحدة</th>
-<th>حذف</th>
+
+<th>
+الكود
+</th>
+
+
+
+<th>
+الصنف
+</th>
+
+
+
+<th>
+الكمية
+</th>
+
+
+
+<th>
+الوحدة
+</th>
+
+
+
+<th>
+حذف
+</th>
+
+
 
 </tr>
 
+
+
 </thead>
+
+
+
+
 
 
 <tbody id="requestItemsTable">
 
 
+
 </tbody>
+
+
+
 
 
 </table>
 
 
 
+
+
+
+
+
+
 <br>
+
+
+
+
+
 
 
 <button onclick="saveRequest()">
 
+
 💾 حفظ الطلب
 
+
 </button>
+
+
+
+
 
 
 
 <p id="requestMsg"></p>
 
 
+
+
+
 </div>
+
+
+
+
 
 
 </section>
-
-
-
-
+</div>
 
 </div>
 
-
-</div>
 
 
 
@@ -420,6 +688,8 @@ placeholder="أدخل الكمية">
 <script src="app.js"></script>
 
 
+
 </body>
+
 
 </html>
