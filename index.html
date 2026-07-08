@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Warehouse System</title>
+<title>Warehouse ERP</title>
 
 <link rel="stylesheet" href="style.css">
 
@@ -16,9 +16,9 @@
 <body>
 
 
-<div id="loginPage" class="container">
+<div id="loginPage" class="login-box">
 
-<h1>🏭 نظام إدارة المخازن</h1>
+<h1>🏭 Warehouse ERP</h1>
 
 <input id="username" placeholder="اسم المستخدم">
 
@@ -32,45 +32,106 @@
 
 
 
-<div id="dashboard" style="display:none">
+
+<div id="system" style="display:none">
+
+
+<div class="sidebar">
+
+<h2>🏭 المخازن</h2>
+
+<button onclick="showPage('dashboard')">
+🏠 الرئيسية
+</button>
+
+<button onclick="showPage('items')">
+📦 الأصناف
+</button>
+
+<button onclick="showPage('containers')">
+🚢 الكونتينرات
+</button>
+
+<button onclick="showPage('inventory')">
+📊 المخزون
+</button>
+
+<button onclick="showPage('requests')">
+📋 طلبات الاحتياج
+</button>
+
+<button onclick="logout()">
+🚪 خروج
+</button>
+
+</div>
+
+
+
+
+
+<div class="content">
 
 
 <header>
 
-<h2>Dashboard المخازن</h2>
+<h2 id="pageTitle">
+Dashboard
+</h2>
 
-<button onclick="logout()">خروج</button>
+<span id="currentUser"></span>
 
 </header>
 
 
+
+<section id="dashboard">
+
+
 <div class="cards">
+
 
 <div class="card">
 <h3>📦 الأصناف</h3>
-<span id="itemsCount">0</span>
+<strong id="itemsCount">0</strong>
 </div>
 
 
 <div class="card">
 <h3>🚢 الكونتينرات</h3>
-<span id="containersCount">0</span>
+<strong id="containersCount">0</strong>
 </div>
 
 
 <div class="card">
-<h3>👤 المستخدم</h3>
-<span id="currentUser"></span>
+<h3>📋 الطلبات</h3>
+<strong id="requestsCount">0</strong>
+</div>
+
+
+<div class="card">
+<h3>🔄 الحركات</h3>
+<strong id="transactionsCount">0</strong>
 </div>
 
 
 </div>
 
 
+</section>
 
-<h2>بحث عن صنف</h2>
 
-<input id="search" placeholder="ابحث بالكود أو الاسم"
+
+
+
+<section id="items" class="hidden">
+
+
+<h2>📦 الأصناف</h2>
+
+
+<input id="search"
+placeholder="بحث عن صنف"
 onkeyup="searchItems()">
 
 
@@ -80,28 +141,86 @@ onkeyup="searchItems()">
 <thead>
 
 <tr>
-
 <th>الكود</th>
 <th>الصنف</th>
 <th>الوحدة</th>
 <th>الموقع</th>
 <th>Barcode</th>
-
 </tr>
 
 </thead>
 
 
-<tbody id="itemsTable">
-
-</tbody>
+<tbody id="itemsTable"></tbody>
 
 
 </table>
 
 
+</section>
+
+
+
+
+
+
+<section id="containers" class="hidden">
+
+
+<h2>🚢 الكونتينرات</h2>
+
+
+<table>
+
+<thead>
+
+<tr>
+<th>الكود</th>
+<th>الاسم</th>
+<th>المشروع</th>
+<th>الموقع</th>
+</tr>
+
+</thead>
+
+
+<tbody id="containersTable"></tbody>
+
+
+</table>
+
+
+</section>
+
+
+
+
+<section id="inventory" class="hidden">
+
+<h2>📊 المخزون</h2>
+
+<div id="inventoryData"></div>
+
+</section>
+
+
+
+<section id="requests" class="hidden">
+
+<h2>📋 طلبات الاحتياج</h2>
+
+<div>
+لا يوجد طلبات حالياً
+</div>
+
+</section>
+
+
 
 </div>
+
+</div>
+
 
 
 <script src="app.js"></script>
