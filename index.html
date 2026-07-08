@@ -89,6 +89,10 @@
 </button>
 
 
+<button onclick="showPage('newRequest')">
+➕ طلب احتياج جديد
+</button>
+
 
 <button onclick="logout()">
 🚪 خروج
@@ -452,9 +456,13 @@ onkeyup="searchItems()">
 
 
 <div id="requestDetails"></div>
+</section>
+  
 
 
 
+
+<section id="newRequest" class="hidden">
 
 
 <h2>
@@ -462,14 +470,7 @@ onkeyup="searchItems()">
 </h2>
 
 
-
-
-
 <div class="request-box">
-
-
-
-
 
 
 <label>
@@ -477,26 +478,10 @@ onkeyup="searchItems()">
 </label>
 
 
-
-<select id="requestContainer">
-
-
-</select>
-
-
-
-
-
-
+<select id="requestContainer"></select>
 
 
 <br><br>
-
-
-
-
-
-
 
 
 <label>
@@ -504,52 +489,19 @@ onkeyup="searchItems()">
 </label>
 
 
-
-
-
-<input
-
+<input 
 id="itemSearch"
-
 placeholder="اكتب كود الصنف أو الباركود أو الاسم"
-
-onkeyup="searchRequestItem()"
-
+onkeyup="searchRequestItem()">
 
 
->
+<div id="itemResult"></div>
 
 
-
-
-
-
-<div id="itemResult">
-
-
-</div>
-
-
-
-
-
-<div id="selectedItem">
-
-
-</div>
-
-
-
-
-
-
+<div id="selectedItem"></div>
 
 
 <br>
-
-
-
-
 
 
 <label>
@@ -557,39 +509,15 @@ onkeyup="searchRequestItem()"
 </label>
 
 
-
-
-
-<input
-
+<input 
 type="number"
-
 id="requestQty"
-
-placeholder="أدخل الكمية"
-
->
-
-
-
-
-
-
-
+placeholder="أدخل الكمية">
 
 
 <button onclick="addRequestItem()">
-
 ➕ إضافة بند
-
 </button>
-
-
-
-
-
-
-
 
 
 <h3>
@@ -597,120 +525,30 @@ placeholder="أدخل الكمية"
 </h3>
 
 
-
-
-
-
-
-
 <table>
-
-
-
-<thead>
-
-
-
-<tr>
-
-
-<th>
-الكود
-</th>
-
-
-
-<th>
-الصنف
-</th>
-
-
-
-<th>
-الكمية
-</th>
-
-
-
-<th>
-الوحدة
-</th>
-
-
-
-<th>
-حذف
-</th>
-
-
-
-</tr>
-
-
-
-</thead>
-
-
-
-
-
 
 <tbody id="requestItemsTable">
 
-
-
 </tbody>
-
-
-
-
 
 </table>
 
 
-
-
-
-
-
-
-
-<br>
-
-
-
-
-
-
-
 <button onclick="saveRequest()">
-
-
 💾 حفظ الطلب
-
-
 </button>
-
-
-
-
-
 
 
 <p id="requestMsg"></p>
 
 
-
-
-
 </div>
 
-
-
-
-
-
 </section>
+
+
+
+
 </div>
 
 </div>
