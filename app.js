@@ -1,5 +1,6 @@
 const API_URL =
-"https://script.google.com/macros/s/AKfycbwBtgilwn3Js3VQErXO6J1gw8zIXzqQZzj45dntpiTQjQfc4qWnel-_6kVVFiRbO6Aq/exec";
+"https://script.google.com/macros/s/AKfycbxRd2dHhswl0ZX8mPhcleVmjBsO_1dRrKhaGYelWbixczUK4N7yt85xr24NXnXq-uzG/exec";
+
 
 
 let users = [];
@@ -11,15 +12,20 @@ let transactions = [];
 
 let newRequestItems = [];
 
+let selectedRequestItem = null;
+
 
 
 // ============================
-// GET DATA FROM GOOGLE SHEETS
+// GET DATA
 // ============================
+
 
 async function getData(action){
 
+
     try{
+
 
         let response = await fetch(
             API_URL + "?action=" + action
@@ -29,51 +35,68 @@ async function getData(action){
         return await response.json();
 
 
+
     }
     catch(error){
+
 
         console.log(action,error);
 
         return [];
 
+
     }
+
 
 }
 
 
 
 
+
+
 // ============================
-// LOAD ALL DATA
+// LOAD DATA
 // ============================
+
 
 async function loadData(){
 
 
-    users = await getData("getUsers");
-
-    items = await getData("getItems");
-
-    containers = await getData("getContainers");
-
-    inventory = await getData("getInventory");
-
-    requests = await getData("getRequests");
-
-    transactions = await getData("getTransactions");
+    users =
+    await getData("getUsers");
 
 
+    items =
+    await getData("getItems");
 
-    console.log("USERS",users);
 
-    console.log("ITEMS",items);
+    containers =
+    await getData("getContainers");
 
-    console.log("CONTAINERS",containers);
 
-    console.log("INVENTORY",inventory);
+    inventory =
+    await getData("getInventory");
+
+
+    requests =
+    await getData("getRequests");
+
+
+    transactions =
+    await getData("getTransactions");
+
+
+
+    console.log("Users",users);
+
+    console.log("Containers",containers);
+
+    console.log("Inventory",inventory);
 
 
 }
+
 
 
 
@@ -84,96 +107,110 @@ async function loadData(){
 // LOGIN
 // ============================
 
+
 async function login(){
 
 
-    await loadData();
+await loadData();
 
 
 
-    let username =
-    document.getElementById("username").value.trim();
+let username =
+document.getElementById("username")
+.value.trim();
 
 
 
-    let password =
-    document.getElementById("password").value.trim();
-
-
-
-
-    let user = users.find(row=>{
-
-
-        return row[2]==username &&
-               row[3]==password;
-
-
-    });
+let password =
+document.getElementById("password")
+.value.trim();
 
 
 
 
-    if(user){
+let user =
+users.find(row=>{
 
 
-
-        document.getElementById("loginPage").style.display="none";
-
-
-        document.getElementById("system").style.display="block";
+return row[2]==username &&
+row[3]==password;
 
 
-
-        document.getElementById("currentUser").innerHTML =
-        "👤 "+user[1];
+});
 
 
 
 
-        document.getElementById("itemsCount").innerHTML =
-        items.length-1;
+if(user){
+
+
+document.getElementById("loginPage")
+.style.display="none";
+
+
+document.getElementById("system")
+.style.display="block";
 
 
 
-        document.getElementById("containersCount").innerHTML =
-        containers.length-1;
-
-
-
-        document.getElementById("requestsCount").innerHTML =
-        requests.length-1;
-
-
-
-        document.getElementById("transactionsCount").innerHTML =
-        transactions.length-1;
+document.getElementById("currentUser")
+.innerHTML =
+"👤 "+user[1];
 
 
 
 
-        updateDashboard();
+document.getElementById("itemsCount")
+.innerHTML =
+items.length-1;
 
 
-        showItems();
 
-        showContainers();
-
-        showInventory();
-
-
-        loadRequestLists();
+document.getElementById("containersCount")
+.innerHTML =
+containers.length-1;
 
 
-    }
-    else{
+
+document.getElementById("requestsCount")
+.innerHTML =
+requests.length-1;
 
 
-        document.getElementById("loginMsg").innerHTML =
-        "❌ بيانات الدخول غير صحيحة";
+
+document.getElementById("transactionsCount")
+.innerHTML =
+transactions.length-1;
 
 
-    }
+
+updateDashboard();
+
+
+showItems();
+
+
+showContainers();
+
+
+showInventory();
+
+
+loadRequestLists();
+
+
+
+}
+
+else{
+
+
+document.getElementById("loginMsg")
+.innerHTML =
+"❌ بيانات الدخول غير صحيحة";
+
+
+}
 
 
 }
@@ -186,54 +223,59 @@ async function login(){
 function updateDashboard(){
 
 
-    let total = 0;
+
+let total = 0;
 
 
 
-    for(let i=1;i<inventory.length;i++){
+for(let i=1;i<inventory.length;i++){
 
 
-        total += Number(inventory[i][5]) || 0;
+total += Number(inventory[i][5]) || 0;
 
 
-    }
-
-
-
-    document.getElementById("totalStock").innerHTML =
-    total.toLocaleString();
+}
 
 
 
-
-
-    let low = 0;
-
-
-
-    for(let i=1;i<inventory.length;i++){
+document.getElementById("totalStock")
+.innerHTML =
+total.toLocaleString();
 
 
 
-        if(Number(inventory[i][5]) <= 0){
 
 
-            low++;
-
-
-        }
-
-
-    }
+let low = 0;
 
 
 
-    document.getElementById("lowStock").innerHTML =
-    low;
+for(let i=1;i<inventory.length;i++){
 
 
 
-    showLastTransactions();
+if(Number(inventory[i][5])<=0){
+
+
+low++;
+
+
+}
+
+
+}
+
+
+
+document.getElementById("lowStock")
+.innerHTML =
+low;
+
+
+
+
+showLastTransactions();
+
 
 
 }
@@ -250,59 +292,75 @@ function updateDashboard(){
 // ============================
 
 
+
 function showLastTransactions(){
 
 
-    let html="";
+
+let html="";
 
 
 
-    let start =
-    Math.max(1,transactions.length-5);
-
-
-
-
-    for(let i=start;i<transactions.length;i++){
-
-
-        html += `
-
-        <tr>
-
-        <td>${transactions[i][0] || ""}</td>
-
-        <td>${transactions[i][2] || ""}</td>
-
-        <td>${transactions[i][3] || ""}</td>
-
-        <td>${transactions[i][4] || ""}</td>
-
-        <td>${transactions[i][6] || ""}</td>
-
-
-        </tr>
-
-        `;
-
-
-    }
+let start =
+Math.max(1,transactions.length-5);
 
 
 
 
-    let table =
-    document.getElementById("lastTransactions");
+for(let i=start;i<transactions.length;i++){
 
 
-    if(table){
 
-        table.innerHTML = html;
+html += `
 
-    }
+
+<tr>
+
+
+<td>${transactions[i][0] || ""}</td>
+
+
+<td>${transactions[i][2] || ""}</td>
+
+
+<td>${transactions[i][3] || ""}</td>
+
+
+<td>${transactions[i][4] || ""}</td>
+
+
+<td>${transactions[i][6] || ""}</td>
+
+
+</tr>
+
+
+`;
+
 
 
 }
+
+
+
+
+let table =
+document.getElementById("lastTransactions");
+
+
+
+if(table){
+
+
+table.innerHTML = html;
+
+
+}
+
+
+
+}
+
 
 
 
@@ -316,80 +374,93 @@ function showLastTransactions(){
 // ============================
 
 
+
 function showPage(page){
 
 
 
-    let pages=[
-
-        "dashboard",
-        "items",
-        "containers",
-        "inventory",
-        "requests"
-
-    ];
+let pages=[
 
 
+"dashboard",
+
+"items",
+
+"containers",
+
+"inventory",
+
+"requests"
 
 
-    pages.forEach(p=>{
-
-
-        let section =
-        document.getElementById(p);
-
-
-
-        if(section){
-
-            section.classList.add("hidden");
-
-        }
-
-
-    });
+];
 
 
 
 
 
-    let current =
-    document.getElementById(page);
+pages.forEach(p=>{
+
+
+let section =
+document.getElementById(p);
 
 
 
-    if(current){
-
-        current.classList.remove("hidden");
-
-    }
+if(section){
 
 
+section.classList.add("hidden");
+
+
+}
 
 
 
-
-    document.getElementById("pageTitle").innerHTML =
-    page.toUpperCase();
+});
 
 
 
 
 
-    // تحميل بيانات الطلب عند فتح الصفحة
-
-    if(page=="requests"){
-
-
-        loadRequestLists();
+let current =
+document.getElementById(page);
 
 
-    }
+
+if(current){
+
+
+current.classList.remove("hidden");
+
+
+}
+
+
+
+
+
+document.getElementById("pageTitle")
+.innerHTML =
+page.toUpperCase();
+
+
+
+
+
+
+if(page=="requests"){
+
+
+loadRequestLists();
+
+
+}
 
 
 
 }
+
 
 // ============================
 // ITEMS
@@ -400,40 +471,60 @@ function showItems(data=items){
 
 
 
-    let html="";
+let html="";
 
 
 
-    for(let i=1;i<data.length;i++){
-
-
-        html += `
-
-        <tr>
-
-        <td>${data[i][0] || ""}</td>
-
-        <td>${data[i][1] || ""}</td>
-
-        <td>${data[i][2] || ""}</td>
-
-        <td>${data[i][4] || ""}</td>
-
-        <td>${data[i][7] || ""}</td>
-
-
-        </tr>
-
-        `;
-
-
-    }
+for(let i=1;i<data.length;i++){
 
 
 
+html += `
 
-    document.getElementById("itemsTable").innerHTML =
-    html;
+
+<tr>
+
+
+<td>${data[i][0] || ""}</td>
+
+
+<td>${data[i][1] || ""}</td>
+
+
+<td>${data[i][2] || ""}</td>
+
+
+<td>${data[i][4] || ""}</td>
+
+
+<td>${data[i][7] || ""}</td>
+
+
+
+</tr>
+
+
+`;
+
+
+
+}
+
+
+
+let table =
+document.getElementById("itemsTable");
+
+
+
+if(table){
+
+
+table.innerHTML = html;
+
+
+}
+
 
 
 }
@@ -444,46 +535,59 @@ function showItems(data=items){
 
 
 
+
+// ============================
+// SEARCH ITEMS
+// ============================
+
+
+
 function searchItems(){
 
 
 
-    let value =
-    document.getElementById("search").value.toLowerCase();
+let value =
+document.getElementById("search")
+.value
+.toLowerCase();
 
 
 
 
-    let result =
-    items.filter((row,index)=>{
 
-
-        if(index==0){
-
-            return true;
-
-        }
+let result =
+items.filter((row,index)=>{
 
 
 
-        return String(row[0])
-        .toLowerCase()
-        .includes(value)
+if(index==0){
 
-        ||
+return true;
 
-        String(row[1])
-        .toLowerCase()
-        .includes(value);
+}
 
 
 
-    });
+return String(row[0])
+.toLowerCase()
+.includes(value)
+
+
+||
+
+String(row[1])
+.toLowerCase()
+.includes(value);
+
+
+
+});
 
 
 
 
-    showItems(result);
+
+showItems(result);
 
 
 
@@ -502,54 +606,65 @@ function searchItems(){
 // ============================
 
 
+
 function showContainers(){
 
 
 
-    let html="";
+let html="";
+
+
+
+for(let i=1;i<containers.length;i++){
+
+
+
+html += `
+
+
+<tr>
+
+
+<td>${containers[i][0] || ""}</td>
+
+
+<td>${containers[i][1] || ""}</td>
+
+
+<td>${containers[i][2] || ""}</td>
+
+
+<td>${containers[i][3] || ""}</td>
+
+
+<td>${containers[i][5] || ""}</td>
+
+
+
+</tr>
+
+
+`;
+
+
+
+}
 
 
 
 
-    for(let i=1;i<containers.length;i++){
+let table =
+document.getElementById("containersTable");
 
 
 
-        html += `
+if(table){
 
 
-        <tr>
+table.innerHTML = html;
 
 
-        <td>${containers[i][0] || ""}</td>
-
-
-        <td>${containers[i][1] || ""}</td>
-
-
-        <td>${containers[i][2] || ""}</td>
-
-
-        <td>${containers[i][3] || ""}</td>
-
-
-        <td>${containers[i][5] || ""}</td>
-
-
-        </tr>
-
-
-        `;
-
-
-    }
-
-
-
-
-
-    document.getElementById("containersTable")
-    .innerHTML = html;
+}
 
 
 
@@ -566,6 +681,7 @@ function showContainers(){
 // ============================
 // INVENTORY
 // ============================
+
 
 
 function showInventory(){
@@ -597,7 +713,6 @@ let html = `
 
 
 </tr>
-
 
 
 `;
@@ -642,12 +757,13 @@ html += `
 </tr>
 
 
-
 `;
 
 
 
 }
+
+
 
 
 
@@ -658,8 +774,19 @@ html += "</table>";
 
 
 
-document.getElementById("inventoryData")
-.innerHTML = html;
+
+let box =
+document.getElementById("inventoryData");
+
+
+
+if(box){
+
+
+box.innerHTML = html;
+
+
+}
 
 
 
@@ -679,15 +806,8 @@ let containerSelect =
 document.getElementById("requestContainer");
 
 
-let itemSelect =
-document.getElementById("requestItem");
 
-
-
-
-if(!containerSelect || !itemSelect){
-
-console.log("Request elements not found");
+if(!containerSelect){
 
 return;
 
@@ -697,19 +817,7 @@ return;
 
 
 
-
-
-// ============================
-// CONTAINERS LIST
-// ============================
-
-
-let containerHTML = "";
-
-
-
-
-if(containers.length > 1){
+let html="";
 
 
 
@@ -717,7 +825,7 @@ for(let i=1;i<containers.length;i++){
 
 
 
-containerHTML += `
+html += `
 
 
 <option value="${containers[i][0]}">
@@ -729,7 +837,6 @@ ${containers[i][0]} - ${containers[i][1]}
 </option>
 
 
-
 `;
 
 
@@ -738,96 +845,7 @@ ${containers[i][0]} - ${containers[i][1]}
 
 
 
-}
-else{
-
-
-containerHTML = `
-
-<option>
-لا يوجد كونتينرات
-</option>
-
-`;
-
-
-
-}
-
-
-
-containerSelect.innerHTML =
-containerHTML;
-
-
-
-
-
-
-
-
-
-// ============================
-// ITEMS LIST FROM INVENTORY
-// ============================
-
-
-
-let itemHTML = "";
-
-
-
-
-if(inventory.length > 1){
-
-
-
-for(let i=1;i<inventory.length;i++){
-
-
-
-itemHTML += `
-
-
-<option value="${inventory[i][0]}">
-
-
-${inventory[i][0]} - ${inventory[i][1]}
-(الرصيد: ${inventory[i][5]})
-
-
-</option>
-
-
-
-`;
-
-
-
-}
-
-
-
-}
-else{
-
-
-itemHTML = `
-
-<option>
-لا يوجد أصناف
-</option>
-
-`;
-
-
-
-}
-
-
-
-itemSelect.innerHTML =
-itemHTML;
+containerSelect.innerHTML = html;
 
 
 
@@ -842,7 +860,241 @@ itemHTML;
 
 
 // ============================
-// ADD REQUEST ITEM
+// SEARCH REQUEST ITEM
+// ============================
+
+
+
+function searchRequestItem(){
+
+
+
+let value =
+document.getElementById("itemSearch")
+.value
+.toLowerCase();
+
+
+
+
+
+if(value==""){
+
+
+document.getElementById("itemResult")
+.innerHTML="";
+
+
+return;
+
+
+}
+
+
+
+
+
+let result =
+inventory.filter((row,index)=>{
+
+
+
+if(index==0){
+
+return false;
+
+}
+
+
+
+
+return String(row[0])
+.toLowerCase()
+.includes(value)
+
+
+||
+
+String(row[1])
+.toLowerCase()
+.includes(value)
+
+
+||
+
+String(row[7])
+.toLowerCase()
+.includes(value);
+
+
+
+});
+
+
+
+
+
+
+
+let html="";
+
+
+
+result.slice(0,10).forEach(item=>{
+
+
+
+html += `
+
+
+<div 
+
+style="
+padding:10px;
+border:1px solid #ddd;
+margin:5px;
+cursor:pointer;
+"
+
+
+onclick="selectRequestItem('${item[0]}')"
+
+
+
+>
+
+
+<b>${item[0]}</b>
+-
+${item[1]}
+
+
+<br>
+
+
+الوحدة:
+${item[2]}
+
+
+<br>
+
+
+الرصيد:
+${item[5]}
+
+
+
+</div>
+
+
+
+`;
+
+
+
+});
+
+
+
+
+
+
+document.getElementById("itemResult")
+.innerHTML = html;
+
+
+
+}
+
+
+
+
+
+
+
+
+
+// ============================
+// SELECT ITEM
+// ============================
+
+
+
+function selectRequestItem(code){
+
+
+
+selectedRequestItem =
+inventory.find(row=>row[0]==code);
+
+
+
+
+
+if(!selectedRequestItem){
+
+
+return;
+
+
+}
+
+
+
+
+
+document.getElementById("selectedItem")
+.innerHTML = `
+
+
+✅ تم اختيار:
+
+
+<b>
+${selectedRequestItem[0]}
+-
+${selectedRequestItem[1]}
+</b>
+
+
+<br>
+
+
+الوحدة:
+${selectedRequestItem[2]}
+
+
+<br>
+
+
+الرصيد الحالي:
+${selectedRequestItem[5]}
+
+
+
+`;
+
+
+
+
+
+document.getElementById("itemResult")
+.innerHTML="";
+
+
+
+}
+
+
+
+
+
+
+
+
+
+// ============================
+// ADD ITEM TO REQUEST
 // ============================
 
 
@@ -851,29 +1103,20 @@ function addRequestItem(){
 
 
 
-let code =
-document.getElementById("requestItem").value;
-
-
-
-
-let item =
-inventory.find(row=>row[0]==code);
-
-
-
-
 let qty =
-Number(document.getElementById("requestQty").value);
+Number(
+document.getElementById("requestQty")
+.value
+);
 
 
 
 
 
-if(!item || qty<=0){
+if(!selectedRequestItem){
 
 
-alert("أدخل الصنف والكمية");
+alert("اختر الصنف أولا");
 
 
 return;
@@ -886,20 +1129,55 @@ return;
 
 
 
+if(qty<=0){
+
+
+alert("أدخل الكمية");
+
+
+return;
+
+
+}
+
+
+
+
+
+
+
+if(qty > Number(selectedRequestItem[5])){
+
+
+alert(
+"الكمية أكبر من الرصيد المتاح"
+);
+
+
+return;
+
+
+}
+
+
+
+
+
+
+
 newRequestItems.push({
 
 
-ItemCode:item[0],
+ItemCode:selectedRequestItem[0],
 
 
-ItemName:item[1],
+ItemName:selectedRequestItem[1],
 
 
 Qty:qty,
 
 
-Unit:item[2]
-
+Unit:selectedRequestItem[2]
 
 
 });
@@ -909,7 +1187,29 @@ Unit:item[2]
 
 
 
+
 showRequestItems();
+
+
+
+
+
+document.getElementById("itemSearch")
+.value="";
+
+
+
+document.getElementById("requestQty")
+.value="";
+
+
+
+document.getElementById("selectedItem")
+.innerHTML="";
+
+
+
+selectedRequestItem=null;
 
 
 
@@ -933,7 +1233,7 @@ function showRequestItems(){
 
 
 
-let html = "";
+let html="";
 
 
 
@@ -948,7 +1248,6 @@ html += `
 <tr>
 
 
-
 <td>${item.ItemCode}</td>
 
 
@@ -959,7 +1258,6 @@ html += `
 
 
 <td>${item.Unit}</td>
-
 
 
 <td>
@@ -990,6 +1288,7 @@ html += `
 
 
 
+
 document.getElementById("requestItemsTable")
 .innerHTML = html;
 
@@ -1014,23 +1313,13 @@ document.getElementById("requestItemsTable")
 function deleteRequestItem(index){
 
 
-
 newRequestItems.splice(index,1);
-
 
 
 showRequestItems();
 
 
-
 }
-
-
-
-
-
-
-
 
 
 // ============================
@@ -1046,7 +1335,7 @@ async function saveRequest(){
 if(newRequestItems.length==0){
 
 
-alert("أضف أصناف للطلب");
+alert("أضف أصناف للطلب أولا");
 
 
 return;
@@ -1059,10 +1348,11 @@ return;
 
 
 
-
 let requestNo =
 
-"PR-" +
+"PR-"
+
++
 
 new Date().getFullYear()
 
@@ -1080,6 +1370,7 @@ Date.now();
 
 
 
+
 let data = {
 
 
@@ -1087,14 +1378,20 @@ let data = {
 action:"saveRequest",
 
 
+
 RequestNo:requestNo,
 
 
-Date:new Date().toLocaleDateString(),
+
+Date:
+new Date().toLocaleDateString(),
 
 
 
-User:"Mohamed",
+
+User:
+document.getElementById("currentUser").innerText,
+
 
 
 
@@ -1103,11 +1400,15 @@ document.getElementById("requestContainer").value,
 
 
 
+
 Status:"Open",
 
 
 
-QR:requestNo,
+
+QR:
+requestNo,
+
 
 
 
@@ -1124,12 +1425,18 @@ items:newRequestItems
 
 
 
-await fetch(API_URL,{
+try{
+
+
+
+let response = await fetch(API_URL,{
+
 
 method:"POST",
 
 
 body:JSON.stringify(data)
+
 
 
 });
@@ -1140,10 +1447,24 @@ body:JSON.stringify(data)
 
 
 
+let result =
+await response.text();
 
-document.getElementById("requestMsg").innerHTML =
 
-"✅ تم حفظ الطلب رقم "
+
+
+console.log(result);
+
+
+
+
+
+
+document.getElementById("requestMsg")
+.innerHTML =
+
+
+"✅ تم حفظ الطلب "
 
 +
 
@@ -1159,12 +1480,32 @@ requestNo;
 newRequestItems=[];
 
 
+
 showRequestItems();
+
+
+
 
 
 
 }
 
+catch(error){
+
+
+
+console.log(error);
+
+
+
+alert("حدث خطأ أثناء الحفظ");
+
+
+}
+
+
+
+}
 
 
 
@@ -1178,16 +1519,14 @@ showRequestItems();
 // ============================
 
 
+
 function logout(){
+
 
 
 location.reload();
 
 
 }
-
-
-
-
 
 
