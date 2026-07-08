@@ -182,9 +182,11 @@ showContainers();
 
 showInventory();
 
-    showRequests();
+   showRequests();
 
 loadRequestLists();
+
+showPage("dashboard");
 
 
 
@@ -369,7 +371,6 @@ function showPage(page){
 
 let pages=[
 
-
 "dashboard",
 
 "items",
@@ -378,11 +379,11 @@ let pages=[
 
 "inventory",
 
-"requests"
+"requests",
 
+"newRequest"
 
 ];
-
 
 
 
