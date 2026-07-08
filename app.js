@@ -1576,11 +1576,12 @@ document.getElementById("requestsTable");
 
 if(table){
 
-table.innerHTML=html;
+    table.innerHTML = html;
 
 }
 
 
+} // <-- قفل دالة showRequests هنا
 
 
 
@@ -1617,11 +1618,17 @@ ${requestsItems[i][4]}
 
 
 
-document.getElementById("requestDetails")
-.innerHTML=html;
+let details =
+document.getElementById("requestDetails");
 
+
+if(details){
+
+details.innerHTML = html;
 
 }
 
+
+}
 
 
