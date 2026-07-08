@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Warehouse System</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+<div id="loginPage" class="container">
+
+<h1>🏭 نظام إدارة المخازن</h1>
+
+<input id="username" placeholder="اسم المستخدم">
+
+<input id="password" type="password" placeholder="كلمة المرور">
+
+<button onclick="login()">دخول</button>
+
+<p id="loginMsg"></p>
+
+</div>
+
+
+
+<div id="dashboard" style="display:none">
+
+
+<header>
+
+<h2>Dashboard المخازن</h2>
+
+<button onclick="logout()">خروج</button>
+
+</header>
+
+
+<div class="cards">
+
+<div class="card">
+<h3>📦 الأصناف</h3>
+<span id="itemsCount">0</span>
+</div>
+
+
+<div class="card">
+<h3>🚢 الكونتينرات</h3>
+<span id="containersCount">0</span>
+</div>
+
+
+<div class="card">
+<h3>👤 المستخدم</h3>
+<span id="currentUser"></span>
+</div>
+
+
+</div>
+
+
+
+<h2>بحث عن صنف</h2>
+
+<input id="search" placeholder="ابحث بالكود أو الاسم"
+onkeyup="searchItems()">
+
+
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>الكود</th>
+<th>الصنف</th>
+<th>الوحدة</th>
+<th>الموقع</th>
+<th>Barcode</th>
+
+</tr>
+
+</thead>
+
+
+<tbody id="itemsTable">
+
+</tbody>
+
+
+</table>
+
+
+
+</div>
+
+
+<script src="app.js"></script>
+
+</body>
+
+</html>
