@@ -198,12 +198,18 @@ Dashboard
 <section id="items" class="hidden">
 
 
-<h2>📦 الأصناف</h2>
+<label>📦 الصنف</label>
+
+<input 
+id="itemSearch"
+placeholder="اكتب كود الصنف أو الباركود أو الاسم"
+onkeyup="searchRequestItem()">
 
 
-<input id="search"
-placeholder="بحث بالكود أو الاسم"
-onkeyup="searchItems()">
+<div id="itemResult"></div>
+
+
+<div id="selectedItem"></div>
 
 
 
