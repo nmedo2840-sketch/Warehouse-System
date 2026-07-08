@@ -2,8 +2,6 @@ const API_URL =
 "https://script.google.com/macros/s/AKfycbxRd2dHhswl0ZX8mPhcleVmjBsO_1dRrKhaGYelWbixczUK4N7yt85xr24NXnXq-uzG/exec";
 
 
-// البيانات العامة
-
 let users = [];
 let items = [];
 let containers = [];
@@ -13,9 +11,8 @@ let transactions = [];
 
 
 
-
 // ============================
-// جلب البيانات من Google Script
+// Get Data
 // ============================
 
 async function getData(action){
@@ -26,9 +23,7 @@ async function getData(action){
             API_URL + "?action=" + action
         );
 
-        let data = await response.json();
-
-        return data;
+        return await response.json();
 
     }
 
@@ -47,7 +42,6 @@ async function getData(action){
 
 async function loadData(){
 
-
     users = await getData("getUsers");
 
     items = await getData("getItems");
@@ -59,7 +53,6 @@ async function loadData(){
     requests = await getData("getRequests");
 
     transactions = await getData("getTransactions");
-
 
 }
 
@@ -83,16 +76,18 @@ async function login(){
     document.getElementById("username").value.trim();
 
 
+
     let password =
     document.getElementById("password").value.trim();
+
 
 
 
     let user = users.find(row=>{
 
 
-        return row[2] == username &&
-               row[3] == password;
+        return row[2]==username &&
+               row[3]==password;
 
 
     });
@@ -100,8 +95,8 @@ async function login(){
 
 
 
-
     if(user){
+
 
 
         document.getElementById("loginPage").style.display="none";
@@ -116,7 +111,6 @@ async function login(){
 
 
 
-        // الكروت
 
         document.getElementById("itemsCount").innerHTML =
         items.length-1;
@@ -141,13 +135,11 @@ async function login(){
         updateDashboard();
 
 
-
         showItems();
 
         showContainers();
 
         showInventory();
-
 
 
     }
@@ -169,7 +161,6 @@ async function login(){
 
 
 
-
 // ============================
 // Dashboard
 // ============================
@@ -178,16 +169,14 @@ async function login(){
 function updateDashboard(){
 
 
-
-    // إجمالي الرصيد
-
     let total = 0;
+
 
 
     for(let i=1;i<inventory.length;i++){
 
 
-        total += Number(inventory[i][1]) || 0;
+        total += Number(inventory[i][5]) || 0;
 
 
     }
@@ -195,52 +184,28 @@ function updateDashboard(){
 
 
     document.getElementById("totalStock").innerHTML =
-    total;
+    total.toLocaleString();
 
 
 
-
-    // أصناف تحت الحد الأدنى
 
 
     let low = 0;
 
 
 
-    for(let i=1;i<items.length;i++){
-
-
-        let code = items[i][0];
-
-        let minQty = Number(items[i][5]) || 0;
+    for(let i=1;i<inventory.length;i++){
 
 
 
-        let stock = inventory.find(row=>{
+        if(Number(inventory[i][5]) <= 0){
 
-
-            return row[0] == code;
-
-
-        });
-
-
-
-        if(stock){
-
-
-            if(Number(stock[1]) <= minQty){
-
-
-                low++;
-
-            }
+            low++;
 
         }
 
 
     }
-
 
 
 
@@ -258,12 +223,18 @@ function updateDashboard(){
 
 
 
-// آخر الحركات
+
+
+// ============================
+// Last Transactions
+// ============================
+
 
 function showLastTransactions(){
 
 
     let html="";
+
 
 
     let start =
@@ -289,7 +260,6 @@ function showLastTransactions(){
 
         <td>${transactions[i][6] || ""}</td>
 
-
         </tr>
 
         `;
@@ -313,12 +283,11 @@ function showLastTransactions(){
 
 
 // ============================
-// الصفحات
+// Pages
 // ============================
 
 
 function showPage(page){
-
 
 
     let pages=[
@@ -336,21 +305,11 @@ function showPage(page){
     pages.forEach(p=>{
 
 
-        let element =
-        document.getElementById(p);
-
-
-
-        if(element){
-
-            element.classList.add("hidden");
-
-        }
+        document.getElementById(p)
+        .classList.add("hidden");
 
 
     });
-
-
 
 
 
@@ -360,8 +319,8 @@ function showPage(page){
 
 
     document.getElementById("pageTitle")
-    .innerHTML = page.toUpperCase();
-
+    .innerHTML =
+    page.toUpperCase();
 
 
 }
@@ -374,14 +333,16 @@ function showPage(page){
 
 
 // ============================
-// الأصناف
+// Items
 // ============================
 
 
 function showItems(data=items){
 
 
+
     let html="";
+
 
 
     for(let i=1;i<data.length;i++){
@@ -402,9 +363,7 @@ function showItems(data=items){
 
         <td>${data[i][7] || ""}</td>
 
-
         </tr>
-
 
         `;
 
@@ -422,11 +381,7 @@ function showItems(data=items){
 
 
 
-
-
-
 function searchItems(){
-
 
 
     let value =
@@ -438,9 +393,8 @@ function searchItems(){
     items.filter((row,index)=>{
 
 
-
         if(index==0)
-            return true;
+        return true;
 
 
 
@@ -453,9 +407,7 @@ function searchItems(){
         .includes(value);
 
 
-
     });
-
 
 
 
@@ -471,13 +423,13 @@ function searchItems(){
 
 
 
+
 // ============================
-// الكونتينرات
+// Containers
 // ============================
 
 
 function showContainers(){
-
 
 
     let html="";
@@ -488,29 +440,27 @@ function showContainers(){
 
 
 
-        html += `
+        html +=`
 
         <tr>
 
-        <td>${containers[i][0] || ""}</td>
+        <td>${containers[i][0]||""}</td>
 
-        <td>${containers[i][1] || ""}</td>
+        <td>${containers[i][1]||""}</td>
 
-        <td>${containers[i][2] || ""}</td>
+        <td>${containers[i][2]||""}</td>
 
-        <td>${containers[i][3] || ""}</td>
+        <td>${containers[i][3]||""}</td>
 
-        <td>${containers[i][5] || ""}</td>
+        <td>${containers[i][5]||""}</td>
 
 
         </tr>
-
 
         `;
 
 
     }
-
 
 
 
@@ -528,60 +478,72 @@ function showContainers(){
 
 
 // ============================
-// المخزون
+// Inventory
 // ============================
 
 
 function showInventory(){
 
 
+let html=`
 
-    let html = `
+<table>
 
-    <table>
+<tr>
 
-    <tr>
+<th>الكود</th>
+<th>الصنف</th>
+<th>الوحدة</th>
+<th>التصنيف</th>
+<th>الموقع</th>
+<th>الرصيد</th>
+<th>C.SAP</th>
 
-    <th>كود الصنف</th>
+</tr>
 
-    <th>الرصيد</th>
-
-    </tr>
-
-    `;
-
-
-
-
-    for(let i=1;i<inventory.length;i++){
+`;
 
 
 
-        html += `
-
-        <tr>
-
-        <td>${inventory[i][0]}</td>
-
-        <td>${inventory[i][1]}</td>
-
-        </tr>
-
-
-        `;
-
-
-    }
+for(let i=1;i<inventory.length;i++){
 
 
 
+html +=`
 
-    html += "</table>";
+<tr>
+
+<td>${inventory[i][0]||""}</td>
+
+<td>${inventory[i][1]||""}</td>
+
+<td>${inventory[i][2]||""}</td>
+
+<td>${inventory[i][3]||""}</td>
+
+<td>${inventory[i][4]||""}</td>
+
+<td>${inventory[i][5]||0}</td>
+
+<td>${inventory[i][6]||""}</td>
+
+
+</tr>
+
+`;
 
 
 
-    document.getElementById("inventoryData")
-    .innerHTML=html;
+}
+
+
+
+html+="</table>";
+
+
+
+document.getElementById("inventoryData")
+.innerHTML=html;
 
 
 }
@@ -593,12 +555,12 @@ function showInventory(){
 
 
 // ============================
-// خروج
+// Logout
 // ============================
 
 
 function logout(){
 
-    location.reload();
+location.reload();
 
 }
