@@ -10,171 +10,185 @@ let requests = [];
 let transactions = [];
 
 
+// =====================
+// قراءة البيانات
+// =====================
 
-// تحميل البيانات من Google Sheet
+async function getData(action){
+
+    try{
+
+        let res = await fetch(API_URL + "?action=" + action);
+
+        let data = await res.json();
+
+        return data;
+
+    }
+
+    catch(error){
+
+        console.log("Error "+action,error);
+
+        return [];
+
+    }
+
+}
+
+
 
 async function loadData(){
 
-try{
+    users = await getData("getUsers");
 
-users = await fetch(API_URL+"?action=getUsers")
-.then(r=>r.json());
+    items = await getData("getItems");
 
+    containers = await getData("getContainers");
 
-items = await fetch(API_URL+"?action=getItems")
-.then(r=>r.json());
+    inventory = await getData("getInventory");
 
+    requests = await getData("getRequests");
 
-containers = await fetch(API_URL+"?action=getContainers")
-.then(r=>r.json());
-
-
-inventory = await fetch(API_URL+"?action=getInventory")
-.then(r=>r.json());
-
-
-requests = await fetch(API_URL+"?action=getRequests")
-.then(r=>r.json());
-
-
-transactions = await fetch(API_URL+"?action=getTransactions")
-.then(r=>r.json());
-
-
-}
-
-catch(error){
-
-console.log(error);
-
-alert("حدث خطأ في الاتصال بالبيانات");
-
-}
+    transactions = await getData("getTransactions");
 
 }
 
 
 
-
-// تسجيل الدخول
+// =====================
+// Login
+// =====================
 
 async function login(){
 
 
-await loadData();
+    await loadData();
+
+
+    let username =
+    document.getElementById("username").value.trim();
+
+
+    let password =
+    document.getElementById("password").value.trim();
 
 
 
-let username =
-document.getElementById("username").value;
+    let user = users.find(function(row){
 
+        return row[2] == username &&
+               row[3] == password;
 
-let password =
-document.getElementById("password").value;
-
-
-
-let user = users.find(row=>{
-
-return row[2]==username &&
-row[3]==password;
-
-});
+    });
 
 
 
-if(user){
+    if(user){
 
 
-document.getElementById("loginPage").style.display="none";
+        document.getElementById("loginPage").style.display="none";
 
 
-document.getElementById("system").style.display="flex";
-
-
-
-document.getElementById("currentUser").innerHTML =
-"👤 "+user[1];
+        document.getElementById("system").style.display="block";
 
 
 
-document.getElementById("itemsCount").innerHTML =
-items.length-1;
-
-
-document.getElementById("containersCount").innerHTML =
-containers.length-1;
-
-
-document.getElementById("requestsCount").innerHTML =
-requests.length-1;
-
-
-document.getElementById("transactionsCount").innerHTML =
-transactions.length-1;
+        document.getElementById("currentUser").innerHTML =
+        "👤 "+user[1];
 
 
 
-showItems();
+        document.getElementById("itemsCount").innerHTML =
+        items.length > 0 ? items.length-1 : 0;
 
-showContainers();
 
-showInventory();
 
+        document.getElementById("containersCount").innerHTML =
+        containers.length > 0 ? containers.length-1 : 0;
+
+
+
+        document.getElementById("requestsCount").innerHTML =
+        requests.length > 0 ? requests.length-1 : 0;
+
+
+
+        document.getElementById("transactionsCount").innerHTML =
+        transactions.length > 0 ? transactions.length-1 : 0;
+
+
+
+        showItems();
+
+        showContainers();
+
+        showInventory();
+
+
+    }
+
+    else{
+
+
+        document.getElementById("loginMsg").innerHTML =
+        "❌ اسم المستخدم أو كلمة المرور غير صحيحة";
+
+
+    }
 
 
 }
 
-else{
 
 
-document.getElementById("loginMsg").innerHTML =
-"❌ بيانات الدخول غير صحيحة";
+// =====================
+// التنقل بين الصفحات
+// =====================
 
-
-}
-
-
-}
-
-
-
-
-// تغيير الصفحات
 
 function showPage(page){
 
 
-let pages=[
-
-"dashboard",
-"items",
-"containers",
-"inventory",
-"requests"
-
-];
+    let pages = [
+        "dashboard",
+        "items",
+        "containers",
+        "inventory",
+        "requests"
+    ];
 
 
 
-pages.forEach(p=>{
+    pages.forEach(function(p){
 
-document.getElementById(p)
-.classList.add("hidden");
+        let el = document.getElementById(p);
 
-});
+        if(el){
+
+            el.classList.add("hidden");
+
+        }
+
+    });
 
 
 
-document.getElementById(page)
-.classList.remove("hidden");
+    let selected =
+    document.getElementById(page);
 
 
 
-document.getElementById("pageTitle")
-.innerHTML =
-page.toUpperCase();
+    if(selected){
 
+        selected.classList.remove("hidden");
+
+    }
+
+
+
+    document.getElementById("pageTitle").innerHTML =
+    page.toUpperCase();
 
 
 }
@@ -182,77 +196,76 @@ page.toUpperCase();
 
 
 
-// عرض الأصناف
+
+// =====================
+// الأصناف
+// =====================
+
 
 function showItems(data=items){
 
 
-let html="";
+    let html="";
 
 
-for(let i=1;i<data.length;i++){
+    for(let i=1;i<data.length;i++){
 
 
-html += `
+        html += `
 
-<tr>
+        <tr>
 
-<td>${data[i][0]}</td>
+        <td>${data[i][0] || ""}</td>
 
-<td>${data[i][1]}</td>
+        <td>${data[i][1] || ""}</td>
 
-<td>${data[i][2]}</td>
+        <td>${data[i][2] || ""}</td>
 
-<td>${data[i][4]}</td>
+        <td>${data[i][4] || ""}</td>
 
-<td>${data[i][7]}</td>
+        <td>${data[i][7] || ""}</td>
+
+        </tr>
+
+        `;
 
 
-</tr>
+    }
 
-`;
+
+    document.getElementById("itemsTable").innerHTML = html;
+
 
 }
 
 
-document.getElementById("itemsTable")
-.innerHTML=html;
 
-
-}
-
-
-
-
-// البحث في الأصناف
 
 function searchItems(){
 
 
-let value =
-document.getElementById("search").value;
+    let value =
+    document.getElementById("search").value;
+
+
+    let result = items.filter(function(row,index){
+
+
+        if(index==0)
+            return true;
 
 
 
-let result =
-items.filter((row,index)=>{
+        return String(row[0]).includes(value)
+        ||
+        String(row[1]).includes(value);
 
 
-if(index==0)
-return true;
-
-
-
-return row[0].includes(value)
-||
-row[1].includes(value);
-
-
-});
+    });
 
 
 
-showItems(result);
+    showItems(result);
 
 
 }
@@ -260,104 +273,113 @@ showItems(result);
 
 
 
+// =====================
+// الكونتينرات
+// =====================
 
-// عرض الكونتينرات
 
 function showContainers(){
 
 
-let html="";
+    let html="";
 
 
-for(let i=1;i<containers.length;i++){
+    for(let i=1;i<containers.length;i++){
 
 
-html +=`
+        html += `
 
-<tr>
+        <tr>
 
-<td>${containers[i][0]}</td>
+        <td>${containers[i][0] || ""}</td>
 
-<td>${containers[i][1]}</td>
+        <td>${containers[i][1] || ""}</td>
 
-<td>${containers[i][2]}</td>
+        <td>${containers[i][2] || ""}</td>
 
-<td>${containers[i][3]}</td>
+        <td>${containers[i][3] || ""}</td>
+
+        </tr>
+
+        `;
 
 
-</tr>
+    }
 
 
-`;
+    document.getElementById("containersTable").innerHTML =
+    html;
+
 
 }
 
 
 
-document.getElementById("containersTable")
-.innerHTML=html;
 
+// =====================
+// المخزون
+// =====================
 
-}
-
-
-
-
-// عرض المخزون
 
 function showInventory(){
 
 
-let html="<table>";
+    let html = `
 
-html +=`
+    <table>
 
-<tr>
+    <tr>
 
-<th>كود الصنف</th>
-<th>الرصيد</th>
+    <th>كود الصنف</th>
 
-</tr>
+    <th>الرصيد</th>
 
-`;
+    </tr>
 
-
-
-for(let i=1;i<inventory.length;i++){
+    `;
 
 
-html +=`
 
-<tr>
+    for(let i=1;i<inventory.length;i++){
 
-<td>${inventory[i][0]}</td>
 
-<td>${inventory[i][1]}</td>
+        html += `
 
-</tr>
+        <tr>
 
-`;
+        <td>${inventory[i][0]}</td>
+
+        <td>${inventory[i][1]}</td>
+
+        </tr>
+
+        `;
+
+
+    }
+
+
+
+    html += "</table>";
+
+
+
+    document.getElementById("inventoryData").innerHTML =
+    html;
+
 
 }
 
 
-html+="</table>";
 
 
+// =====================
+// Logout
+// =====================
 
-document.getElementById("inventoryData")
-.innerHTML=html;
-
-
-}
-
-
-
-
-// خروج
 
 function logout(){
 
-location.reload();
+    location.reload();
 
 }
