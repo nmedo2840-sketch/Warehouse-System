@@ -16,6 +16,8 @@
 <body>
 
 
+<!-- LOGIN -->
+
 <div id="loginPage" class="login-box">
 
 <h1>🏭 Warehouse ERP</h1>
@@ -33,41 +35,58 @@
 
 
 
-<div id="system" style="display:none">
 
+<!-- SYSTEM -->
+
+<div id="system" style="display:none;">
+
+
+
+<!-- SIDEBAR -->
 
 <div class="sidebar">
 
+
 <h2>🏭 المخازن</h2>
+
 
 <button onclick="showPage('dashboard')">
 🏠 الرئيسية
 </button>
 
+
 <button onclick="showPage('items')">
 📦 الأصناف
 </button>
+
 
 <button onclick="showPage('containers')">
 🚢 الكونتينرات
 </button>
 
+
 <button onclick="showPage('inventory')">
 📊 المخزون
 </button>
+
 
 <button onclick="showPage('requests')">
 📋 طلبات الاحتياج
 </button>
 
+
 <button onclick="logout()">
 🚪 خروج
 </button>
+
 
 </div>
 
 
 
+
+
+<!-- CONTENT -->
 
 
 <div class="content">
@@ -83,6 +102,11 @@ Dashboard
 
 </header>
 
+
+
+
+
+<!-- DASHBOARD -->
 
 
 <section id="dashboard">
@@ -115,25 +139,25 @@ Dashboard
 </div>
 
 
+<div class="card">
+<h3>📊 إجمالي الرصيد</h3>
+<strong id="totalStock">0</strong>
 </div>
 
 
-</section>
+<div class="card warning">
+<h3>⚠ تحت الحد الأدنى</h3>
+<strong id="lowStock">0</strong>
+</div>
+
+
+</div>
 
 
 
 
 
-<section id="items" class="hidden">
-
-
-<h2>📦 الأصناف</h2>
-
-
-<input id="search"
-placeholder="بحث عن صنف"
-onkeyup="searchItems()">
-
+<h2>🔄 آخر الحركات</h2>
 
 
 <table>
@@ -141,17 +165,21 @@ onkeyup="searchItems()">
 <thead>
 
 <tr>
-<th>الكود</th>
+
+<th>رقم الحركة</th>
+<th>النوع</th>
 <th>الصنف</th>
-<th>الوحدة</th>
-<th>الموقع</th>
-<th>Barcode</th>
+<th>الكمية</th>
+<th>إلى</th>
+
 </tr>
 
 </thead>
 
 
-<tbody id="itemsTable"></tbody>
+<tbody id="lastTransactions">
+
+</tbody>
 
 
 </table>
@@ -162,6 +190,58 @@ onkeyup="searchItems()">
 
 
 
+
+
+<!-- ITEMS -->
+
+
+<section id="items" class="hidden">
+
+
+<h2>📦 الأصناف</h2>
+
+
+<input id="search"
+placeholder="بحث بالكود أو الاسم"
+onkeyup="searchItems()">
+
+
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>الكود</th>
+<th>الصنف</th>
+<th>الوحدة</th>
+<th>الموقع</th>
+<th>Barcode</th>
+
+</tr>
+
+</thead>
+
+
+<tbody id="itemsTable">
+
+</tbody>
+
+
+</table>
+
+
+</section>
+
+
+
+
+
+
+
+
+<!-- CONTAINERS -->
 
 
 <section id="containers" class="hidden">
@@ -175,16 +255,21 @@ onkeyup="searchItems()">
 <thead>
 
 <tr>
+
 <th>الكود</th>
 <th>الاسم</th>
 <th>المشروع</th>
 <th>الموقع</th>
+<th>المسؤول</th>
+
 </tr>
 
 </thead>
 
 
-<tbody id="containersTable"></tbody>
+<tbody id="containersTable">
+
+</tbody>
 
 
 </table>
@@ -195,35 +280,58 @@ onkeyup="searchItems()">
 
 
 
+
+
+<!-- INVENTORY -->
+
+
 <section id="inventory" class="hidden">
+
 
 <h2>📊 المخزون</h2>
 
+
 <div id="inventoryData"></div>
+
 
 </section>
 
+
+
+
+
+
+
+<!-- REQUESTS -->
 
 
 <section id="requests" class="hidden">
 
+
 <h2>📋 طلبات الاحتياج</h2>
 
-<div>
-لا يوجد طلبات حالياً
-</div>
+
+<p>
+سيتم تطوير شاشة إنشاء الطلب والـ QR في المرحلة القادمة.
+</p>
+
 
 </section>
 
 
 
-</div>
+
 
 </div>
+
+
+</div>
+
 
 
 
 <script src="app.js"></script>
+
 
 </body>
 
