@@ -13,7 +13,7 @@ let transactions = [];
 let newRequestItems = [];
 
 let selectedRequestItem = null;
-
+let requestsItems = [];
 
 
 // ============================
@@ -62,30 +62,21 @@ async function getData(action){
 
 async function loadData(){
 
+    users = await getData("getUsers");
 
-    users =
-    await getData("getUsers");
+    items = await getData("getItems");
 
+    containers = await getData("getContainers");
 
-    items =
-    await getData("getItems");
+    inventory = await getData("getInventory");
 
+    requests = await getData("getRequests");
 
-    containers =
-    await getData("getContainers");
+    requestsItems = await getData("getRequestItems");
 
+    transactions = await getData("getTransactions");
 
-    inventory =
-    await getData("getInventory");
-
-
-    requests =
-    await getData("getRequests");
-
-
-    transactions =
-    await getData("getTransactions");
-
+}
 
 
     console.log("Users",users);
@@ -195,6 +186,7 @@ showContainers();
 
 showInventory();
 
+    showRequests();
 
 loadRequestLists();
 
