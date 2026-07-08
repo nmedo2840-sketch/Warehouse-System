@@ -2,13 +2,20 @@ const API_URL =
 "https://script.google.com/macros/s/AKfycbxRd2dHhswl0ZX8mPhcleVmjBsO_1dRrKhaGYelWbixczUK4N7yt85xr24NXnXq-uzG/exec";
 
 
-let users=[];
-let items=[];
-let containers=[];
+let users = [];
+let items = [];
+let containers = [];
+let inventory = [];
+let requests = [];
+let transactions = [];
 
 
+
+// تحميل البيانات من Google Sheet
 
 async function loadData(){
+
+try{
 
 users = await fetch(API_URL+"?action=getUsers")
 .then(r=>r.json());
@@ -21,65 +28,161 @@ items = await fetch(API_URL+"?action=getItems")
 containers = await fetch(API_URL+"?action=getContainers")
 .then(r=>r.json());
 
+
+inventory = await fetch(API_URL+"?action=getInventory")
+.then(r=>r.json());
+
+
+requests = await fetch(API_URL+"?action=getRequests")
+.then(r=>r.json());
+
+
+transactions = await fetch(API_URL+"?action=getTransactions")
+.then(r=>r.json());
+
+
+}
+
+catch(error){
+
+console.log(error);
+
+alert("حدث خطأ في الاتصال بالبيانات");
+
+}
+
 }
 
 
 
+
+// تسجيل الدخول
+
 async function login(){
+
 
 await loadData();
 
 
-let u=document.getElementById("username").value;
-let p=document.getElementById("password").value;
+
+let username =
+document.getElementById("username").value;
+
+
+let password =
+document.getElementById("password").value;
 
 
 
-let found = users.find(x=>
+let user = users.find(row=>{
 
-x[2]==u && x[3]==p
+return row[2]==username &&
+row[3]==password;
 
-);
+});
 
 
 
-if(found){
+if(user){
 
 
 document.getElementById("loginPage").style.display="none";
 
-document.getElementById("dashboard").style.display="block";
+
+document.getElementById("system").style.display="flex";
 
 
-document.getElementById("currentUser").innerHTML=found[1];
+
+document.getElementById("currentUser").innerHTML =
+"👤 "+user[1];
 
 
-document.getElementById("itemsCount").innerHTML=
+
+document.getElementById("itemsCount").innerHTML =
 items.length-1;
 
 
-document.getElementById("containersCount").innerHTML=
+document.getElementById("containersCount").innerHTML =
 containers.length-1;
 
 
+document.getElementById("requestsCount").innerHTML =
+requests.length-1;
+
+
+document.getElementById("transactionsCount").innerHTML =
+transactions.length-1;
+
+
+
 showItems();
+
+showContainers();
+
+showInventory();
+
 
 
 }
 
 else{
 
-document.getElementById("loginMsg").innerHTML=
-"بيانات الدخول غير صحيحة";
 
-}
-
+document.getElementById("loginMsg").innerHTML =
+"❌ بيانات الدخول غير صحيحة";
 
 
 }
 
 
+}
 
+
+
+
+// تغيير الصفحات
+
+function showPage(page){
+
+
+let pages=[
+
+"dashboard",
+"items",
+"containers",
+"inventory",
+"requests"
+
+];
+
+
+
+pages.forEach(p=>{
+
+document.getElementById(p)
+.classList.add("hidden");
+
+});
+
+
+
+document.getElementById(page)
+.classList.remove("hidden");
+
+
+
+document.getElementById("pageTitle")
+.innerHTML =
+page.toUpperCase();
+
+
+
+}
+
+
+
+
+// عرض الأصناف
 
 function showItems(data=items){
 
@@ -90,7 +193,7 @@ let html="";
 for(let i=1;i<data.length;i++){
 
 
-html+=`
+html += `
 
 <tr>
 
@@ -107,36 +210,46 @@ html+=`
 
 </tr>
 
-
 `;
 
 }
 
 
-document.getElementById("itemsTable").innerHTML=html;
+document.getElementById("itemsTable")
+.innerHTML=html;
 
 
 }
 
 
 
+
+// البحث في الأصناف
+
 function searchItems(){
 
 
-let value=document.getElementById("search").value;
+let value =
+document.getElementById("search").value;
+
 
 
 let result =
-items.filter((x,i)=>{
+items.filter((row,index)=>{
 
-if(i==0)return true;
 
-return x[0].includes(value)
+if(index==0)
+return true;
+
+
+
+return row[0].includes(value)
 ||
-x[1].includes(value);
+row[1].includes(value);
 
 
 });
+
 
 
 showItems(result);
@@ -146,6 +259,102 @@ showItems(result);
 
 
 
+
+
+// عرض الكونتينرات
+
+function showContainers(){
+
+
+let html="";
+
+
+for(let i=1;i<containers.length;i++){
+
+
+html +=`
+
+<tr>
+
+<td>${containers[i][0]}</td>
+
+<td>${containers[i][1]}</td>
+
+<td>${containers[i][2]}</td>
+
+<td>${containers[i][3]}</td>
+
+
+</tr>
+
+
+`;
+
+}
+
+
+
+document.getElementById("containersTable")
+.innerHTML=html;
+
+
+}
+
+
+
+
+// عرض المخزون
+
+function showInventory(){
+
+
+let html="<table>";
+
+html +=`
+
+<tr>
+
+<th>كود الصنف</th>
+<th>الرصيد</th>
+
+</tr>
+
+`;
+
+
+
+for(let i=1;i<inventory.length;i++){
+
+
+html +=`
+
+<tr>
+
+<td>${inventory[i][0]}</td>
+
+<td>${inventory[i][1]}</td>
+
+</tr>
+
+`;
+
+}
+
+
+html+="</table>";
+
+
+
+document.getElementById("inventoryData")
+.innerHTML=html;
+
+
+}
+
+
+
+
+// خروج
 
 function logout(){
 
