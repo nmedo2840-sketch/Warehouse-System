@@ -76,8 +76,6 @@ async function loadData(){
 
     transactions = await getData("getTransactions");
 
-}
-
 
     console.log("Users",users);
 
@@ -85,9 +83,7 @@ async function loadData(){
 
     console.log("Inventory",inventory);
 
-
 }
-
 
 
 
@@ -1574,12 +1570,15 @@ html += `
 }
 
 
-document.getElementById("requestsTable")
-.innerHTML=html;
+let table =
+document.getElementById("requestsTable");
 
+
+if(table){
+
+table.innerHTML=html;
 
 }
-
 
 
 
